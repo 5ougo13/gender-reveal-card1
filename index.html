@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gender Reveal 💌 (Scratch + Blue Confetti)</title>
+  <title>Gender Reveal 💌</title>
   <title>💌 A Little Surprise</title>
 
 <!-- Open Graph / Link Preview (prevents spoilers) -->
@@ -228,7 +228,7 @@
         <h1>Boy or Girl? 💌</h1>
         <p class="jp-lead">
           <span class="jp-line">性別がわかったよ！</span>
-          <span class="jp-line">スクラッチしてみてみて！</span>
+          <span class="jp-line">スクラッチしてみてね！</span>
         </p>
       </div>
       <div class="pill" id="status">Ready to scratch</div>
@@ -238,8 +238,9 @@
       <div class="scratch-wrap" id="wrap" aria-label="Scratch area">
         <div class="reveal" id="reveal">
           <!-- ✅ BOY VERSION TEXT -->
-<p class="big" id="bigText">ひみつ…🤫</p>
-<p class="sub" id="subText">スクラッチしてみてね ✨</p>
+<p class="big" id="bigText">It’s a BOY! 💙</p>
+<p class="sub" id="subText">We can’t wait for you to meet him 💫</p>
+
         </div>
 
         <canvas id="scratch"></canvas>
@@ -255,11 +256,6 @@
   </div>
 
 <script>
-/* -------------------------- Scratch-off behavior -------------------------- */
-  // Actual reveal text (kept out of HTML so previews can't spoil it)
-const REVEAL_BIG = "It’s a BOY! 💙";
-const REVEAL_SUB = "We can’t wait for you to meet him 💫";
-
 const canvas = document.getElementById("scratch");
 const wrap = document.getElementById("wrap");
 const statusPill = document.getElementById("status");
@@ -530,9 +526,6 @@ function clearAll() {
   ctx.restore();
 
   statusPill.textContent = "Revealed 🎉";
-
-  document.getElementById("bigText").textContent = REVEAL_BIG;
-document.getElementById("subText").textContent = REVEAL_SUB;
 
   if (!revealedOnce) {
     revealedOnce = true;
