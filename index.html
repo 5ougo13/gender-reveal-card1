@@ -238,8 +238,8 @@
       <div class="scratch-wrap" id="wrap" aria-label="Scratch area">
         <div class="reveal" id="reveal">
           <!-- ✅ BOY VERSION TEXT -->
-          <p class="big" id="bigText">It’s a BOY! 💙</p>
-          <p class="sub" id="subText">We can’t wait for you to meet him 💫</p>
+<p class="big" id="bigText">ひみつ…🤫</p>
+<p class="sub" id="subText">スクラッチしてみてね ✨</p>
         </div>
 
         <canvas id="scratch"></canvas>
@@ -256,6 +256,9 @@
 
 <script>
 /* -------------------------- Scratch-off behavior -------------------------- */
+  // Actual reveal text (kept out of HTML so previews can't spoil it)
+const REVEAL_BIG = "It’s a BOY! 💙";
+const REVEAL_SUB = "We can’t wait for you to meet him 💫";
 
 const canvas = document.getElementById("scratch");
 const wrap = document.getElementById("wrap");
@@ -355,16 +358,16 @@ function computeScratchedFraction(sampleStep = 8) {
     for (let x = 0; x < w; x += sampleStep) {
       const i = (y * w + x) * 4 + 3;
       total++;
-      if (img[i] === 0) cleared++;
+      if (img[i] === 0) ed++;
     }
   }
-  return cleared / total;
+  return ed / total;
 }
 
 function maybeAutoReveal() {
   const frac = computeScratchedFraction(8);
   if (frac >= AUTO_REVEAL_THRESHOLD) {
-    clearAll();
+    All();
   } else {
     statusPill.textContent = `Scratched ${(frac * 100).toFixed(0)}%`;
   }
@@ -461,7 +464,7 @@ function startConfettiFromCorners() {
     const w = r.width;
     const h = r.height;
 
-    fctx.clearRect(0, 0, w, h);
+    fctx.Rect(0, 0, w, h);
 
     for (const p of confettiParticles) {
       p.vx *= p.air;
@@ -528,6 +531,9 @@ function clearAll() {
 
   statusPill.textContent = "Revealed 🎉";
 
+  document.getElementById("bigText").textContent = REVEAL_BIG;
+document.getElementById("subText").textContent = REVEAL_SUB;
+
   if (!revealedOnce) {
     revealedOnce = true;
     startConfettiFromCorners();
@@ -588,4 +594,5 @@ resetScratchCard();
 </script>
 </body>
 </html>
+
 
