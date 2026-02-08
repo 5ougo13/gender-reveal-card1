@@ -10,10 +10,10 @@
   <meta property="og:title" content="💌 A Little Surprise" />
   <meta property="og:description" content="We have something exciting to share… tap to reveal ✨" />
   <meta property="og:type" content="website" />
-  <!-- IMPORTANT: replace this with your actual hosted URL -->
   <meta property="og:url" content="https://YOUR-SITE-URL-HERE/" />
   <!-- Optional: add a neutral preview image in your site root and update the URL -->
   <!-- <meta property="og:image" content="https://YOUR-SITE-URL-HERE/preview.png" /> -->
+
   <style>
     :root{
       --bg1:#fff3f7;
@@ -28,20 +28,19 @@
     *{box-sizing:border-box}
     html, body {
       width: 100%;
-      overflow-x: hidden; /* prevents the "shifted right" feel on phones */
+      overflow-x: hidden;
     }
 
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
-      min-height: 100svh; /* stable on mobile (prevents jumping) */
-      min-height: 100dvh; /* modern browsers */
-      min-height: 100vh;  /* fallback */
+      min-height: 100svh;
+      min-height: 100dvh;
+      min-height: 100vh;
       display:grid;
       place-items:center;
 
-      /* Subtle pink → stronger blue pastel gradient (boy version) */
       background:
         linear-gradient(
           90deg,
@@ -56,7 +55,7 @@
     }
 
     .card{
-      width: min(720px, calc(100vw - 32px)); /* exact: viewport minus body padding */
+      width: min(720px, calc(100vw - 32px));
       background:var(--card);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -64,7 +63,6 @@
       position:relative;
     }
 
-    /* Confetti overlay: covers entire card */
     #fx{
       position:absolute;
       inset:0;
@@ -88,13 +86,7 @@
       font-size: 28px;
       letter-spacing:-0.02em;
     }
-    .title p{
-      margin:8px 0 0;
-      color:var(--muted);
-      line-height:1.4;
-    }
 
-    /* Force exactly 2 lines in Japanese header text (no extra wrapping) */
     .jp-lead { margin: 8px 0 0; color: var(--muted); line-height: 1.35; }
     .jp-line { display:block; white-space: nowrap; }
 
@@ -128,11 +120,7 @@
     .reveal{
       padding: 34px 18px;
       text-align:center;
-      background: linear-gradient(
-        180deg,
-        #e8f3ff,
-        #f2f8ff
-      );
+      background: linear-gradient(180deg, #e8f3ff, #f2f8ff);
     }
 
     .reveal .big{
@@ -146,7 +134,6 @@
       color: var(--muted);
     }
 
-    /* Scratch canvas */
     #scratch{
       position:absolute;
       inset:0;
@@ -183,14 +170,6 @@
       font-size: 13px;
       line-height:1.4;
     }
-    .footer{
-      padding: 0 26px 26px;
-      color: var(--muted);
-      font-size: 12.5px;
-      position:relative;
-      z-index: 2;
-    }
-    .footer code{background:#f3f4f6; padding:2px 6px; border-radius:8px; color:#374151}
 
     @media (max-width: 420px){
       .header{
@@ -236,9 +215,9 @@
     <div class="stage">
       <div class="scratch-wrap" id="wrap" aria-label="Scratch area">
         <div class="reveal" id="reveal">
-          <!-- ✅ IMPORTANT: keep spoiler text OUT of the HTML -->
-          <p class="big" id="bigText">ひみつ…🤫</p>
-          <p class="sub" id="subText">スクラッチしてね ✨</p>
+          <!-- ✅ Reveals naturally WHILE scratching -->
+          <p class="big" id="bigText">It’s a BOY! 💙</p>
+          <p class="sub" id="subText">We can’t wait for you to meet him 💫</p>
         </div>
 
         <canvas id="scratch"></canvas>
@@ -254,11 +233,6 @@
   </div>
 
 <script>
-/* -------------------------- Spoiler-proof reveal text -------------------------- */
-// ✅ LINE scrapes visible HTML; keep the real result only in JS.
-const REVEAL_BIG = "It’s a BOY! 💙";
-const REVEAL_SUB = "We can’t wait for you to meet him 💫";
-
 /* -------------------------- Scratch-off behavior -------------------------- */
 
 const canvas = document.getElementById("scratch");
@@ -365,7 +339,7 @@ function computeScratchedFraction(sampleStep = 8) {
 function maybeAutoReveal() {
   const frac = computeScratchedFraction(8);
   if (frac >= AUTO_REVEAL_THRESHOLD) {
-    clearAll();
+    clearAll(); // triggers confetti
   } else {
     statusPill.textContent = `Scratched ${(frac * 100).toFixed(0)}%`;
   }
@@ -523,10 +497,6 @@ function clearAll() {
 
   statusPill.textContent = "Revealed 🎉";
 
-  // ✅ Reveal text appears only after scratching (prevents LINE spoilers)
-  document.getElementById("bigText").textContent = REVEAL_BIG;
-  document.getElementById("subText").textContent = REVEAL_SUB;
-
   if (!revealedOnce) {
     revealedOnce = true;
     startConfettiFromCorners();
@@ -562,9 +532,8 @@ function resetScratchCard() {
   drawScratchLayer();
   resizeFxCanvas();
 
-  // Keep placeholders after reset
-  document.getElementById("bigText").textContent = "ひみつ…🤫";
-  document.getElementById("subText").textContent = "スクラッチしてね ✨";
+  // Keep the reveal text visible under the scratch layer (classic behavior)
+  statusPill.textContent = "Ready to scratch";
 }
 
 canvas.addEventListener("mousedown", onDown);
@@ -583,7 +552,9 @@ window.addEventListener("resize", () => {
   resizeTimer = setTimeout(() => {
     resizeScratchCanvasToElement();
     resizeFxCanvas();
-    if (!revealedOnce) drawScratchLayer();
+    if (!revealedOnce) {
+      drawScratchLayer();
+    }
   }, 120);
 });
 
