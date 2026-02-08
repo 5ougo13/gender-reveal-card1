@@ -160,4 +160,129 @@
       background:#fff;
       padding:10px 12px;
       border-radius:12px;
-      font-weigh
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    @media (max-width:420px){
+      .header{
+        flex-wrap:wrap;
+        gap:10px;
+        padding:20px 18px 12px;
+      }
+      .pill{
+        max-width:42vw;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="card" id="card">
+  <canvas id="fx"></canvas>
+
+  <div class="header">
+    <div class="title">
+      <h1>ママへ 💌</h1>
+      <p class="jp-lead">
+        <span class="jp-line">性別がわかったよ！</span>
+        <span class="jp-line">スクラッチしてみてね！</span>
+      </p>
+    </div>
+    <div class="pill" id="status">Ready to scratch</div>
+  </div>
+
+  <div class="stage">
+    <div class="scratch-wrap" id="wrap">
+      <div class="reveal">
+        <!-- ✅ Reveals naturally while scratching -->
+        <p class="big">It’s a BOY! 💙</p>
+        <p class="sub">We can’t wait for you to meet him 💫</p>
+      </div>
+      <canvas id="scratch"></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="hint">
+        携帯なら指でスクラッチ。パソコンならクリックしながらドラッグしてね 🎊
+      </div>
+      <button class="btn" id="resetBtn">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("scratch");
+const wrap = document.getElementById("wrap");
+const statusPill = document.getElementById("status");
+const ctx = canvas.getContext("2d",{willReadFrequently:true});
+let isDown=false,last=null;
+
+function resize(){
+  const dpr=window.devicePixelRatio||1;
+  const r=wrap.getBoundingClientRect();
+  canvas.width=r.width*dpr;
+  canvas.height=r.height*dpr;
+  canvas.style.width=r.width+"px";
+  canvas.style.height=r.height+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawLayer();
+}
+
+function drawLayer(){
+  const w=wrap.clientWidth,h=wrap.clientHeight;
+  ctx.globalCompositeOperation="source-over";
+  ctx.fillStyle="#bfc5cc";
+  ctx.fillRect(0,0,w,h);
+  ctx.globalAlpha=.16;
+  ctx.strokeStyle="#fff";
+  ctx.lineWidth=8;
+  for(let x=-h;x<w+h;x+=26){
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x+h,h);
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  ctx.fillStyle="#111827";
+  ctx.font="700 18px system-ui";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("Scratch here ✨",w/2,h/2);
+  statusPill.textContent="Scratch to reveal";
+}
+
+function point(e){
+  const r=canvas.getBoundingClientRect();
+  const t=e.touches?e.touches[0]:e;
+  return{x:t.clientX-r.left,y:t.clientY-r.top};
+}
+
+function scratch(a,b){
+  ctx.save();
+  ctx.globalCompositeOperation="destination-out";
+  ctx.lineCap="round";
+  ctx.lineJoin="round";
+  ctx.lineWidth=52;
+  ctx.beginPath();
+  ctx.moveTo(a.x,a.y);
+  ctx.lineTo(b.x,b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+canvas.addEventListener("mousedown",e=>{isDown=true;last=point(e)});
+canvas.addEventListener("mousemove",e=>{if(!isDown)return;scratch(last,point(e));last=point(e)});
+window.addEventListener("mouseup",()=>isDown=false);
+
+canvas.addEventListener("touchstart",e=>{isDown=true;last=point(e)},{passive:false});
+canvas.addEventListener("touchmove",e=>{if(!isDown)return;e.preventDefault();scratch(last,point(e));last=point(e)},{passive:false});
+canvas.addEventListener("touchend",()=>isDown=false);
+
+window.addEventListener("resize",resize);
+resize();
+</script>
+</body>
+</html>
