@@ -237,8 +237,6 @@
       <div class="scratch-wrap" id="wrap" aria-label="Scratch area">
         <div class="reveal" id="reveal">
           <!-- ✅ IMPORTANT: keep spoiler text OUT of the HTML -->
-          <p class="big" id="bigText">ひみつ…🤫</p>
-          <p class="sub" id="subText">スクラッチしてね ✨</p>
         </div>
 
         <canvas id="scratch"></canvas>
@@ -563,9 +561,6 @@ function resetScratchCard() {
   resizeFxCanvas();
 
   // Keep placeholders after reset
-  document.getElementById("bigText").textContent = "ひみつ…🤫";
-  document.getElementById("subText").textContent = "スクラッチしてね ✨";
-}
 
 canvas.addEventListener("mousedown", onDown);
 window.addEventListener("mousemove", onMove);
@@ -591,3 +586,4 @@ resetScratchCard();
 </script>
 </body>
 </html>
+
